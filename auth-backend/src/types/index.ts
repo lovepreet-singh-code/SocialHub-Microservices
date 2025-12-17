@@ -55,3 +55,29 @@ export interface IErrorResponse {
   success: false;
   message: string;
 }
+
+export interface INotification {
+  _id: string;
+  userId: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  title: string;
+  message: string;
+  data?: any;
+  read: boolean;
+  createdAt: Date;
+}
+
+export interface INotificationResponse {
+  notifications: INotification[];
+  unreadCount: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface ICreateNotificationRequest {
+  userId: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  title: string;
+  message: string;
+  data?: any;
+}

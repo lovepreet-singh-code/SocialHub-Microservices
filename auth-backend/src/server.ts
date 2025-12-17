@@ -1,14 +1,20 @@
 import 'dotenv/config';
 
 import express, { Application, Request, Response } from 'express';
+import { createServer } from 'http';
 import cors from 'cors';
 import connectDB from './config/db';
 import redisClient from './config/redisClient';
 import errorHandler from './middleware/errorHandler';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+import { socketIO } from './config/socket';
+import { socketAuth } from './middleware/socketAuth';
+import { registerSocketHandlers } from './sockets/socketHandlers';
 
 const app: Application = express();
+const httpServer = createServer(app);
 
 // Connect to MongoDB
 connectDB();
@@ -23,9 +29,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Initialize Socket.IO
+const io = socketIO.init(httpServer);
+io.use(socketAuth);
+registerSocketHandlers(io);
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/notifications', notificationRoutes);
 
 // Health check route
 app.get('/', (_req: Request, res: Response) => {
@@ -37,6 +49,6 @@ app.use(errorHandler);
 
 const PORT: number = parseInt(process.env.PORT || '5000', 10);
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
