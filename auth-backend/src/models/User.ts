@@ -27,6 +27,11 @@ const userSchema = new Schema<IUserDocument>(
       minlength: 6,
       select: false,
     },
+    refreshTokens: {
+      type: [String],
+      default: [],
+      select: false,
+    },
   },
   {
     timestamps: true,

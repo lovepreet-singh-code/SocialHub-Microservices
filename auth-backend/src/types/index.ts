@@ -3,6 +3,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  refreshTokens?: string[];
   createdAt: Date;
   updatedAt: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
@@ -20,6 +21,7 @@ export interface IAuthResponse {
   name: string;
   email: string;
   token: string;
+  refreshToken: string;
 }
 
 export interface IRegisterRequest {
@@ -31,6 +33,10 @@ export interface IRegisterRequest {
 export interface ILoginRequest {
   email: string;
   password: string;
+}
+
+export interface IRefreshTokenRequest {
+  refreshToken: string;
 }
 
 export interface IJwtPayload {
