@@ -1,25 +1,28 @@
-# Auth Backend - Node.js + Express + MongoDB
+# Auth Backend - Node.js + Express + MongoDB + TypeScript
 
-A RESTful API backend built with Node.js, Express, and MongoDB following MVC architecture. Includes user authentication with JWT tokens.
+A RESTful API backend built with Node.js, Express, MongoDB, and TypeScript following MVC architecture. Includes user authentication with JWT tokens, ESLint, and Prettier.
 
 ## Features
 
-- ✅ MVC Architecture
-- ✅ MongoDB with Mongoose ODM
-- ✅ JWT Authentication
-- ✅ Password hashing with bcryptjs
-- ✅ Environment variable configuration
-- ✅ Global error handling
-- ✅ Input validation
+- ✅ **TypeScript** - Full type safety and IntelliSense support
+- ✅ **MVC Architecture** - Clean separation of concerns
+- ✅ **MongoDB with Mongoose** - Type-safe database operations
+- ✅ **JWT Authentication** - Secure token-based auth
+- ✅ **Password Hashing** - bcryptjs for secure passwords
+- ✅ **ESLint & Prettier** - Code quality and formatting
+- ✅ **Environment Config** - dotenv for configuration
+- ✅ **Global Error Handling** - Consistent error responses
 
 ## Tech Stack
 
 - **Runtime**: Node.js
+- **Language**: TypeScript
 - **Framework**: Express.js
 - **Database**: MongoDB
 - **ODM**: Mongoose
 - **Authentication**: JWT (jsonwebtoken)
 - **Password Hashing**: bcryptjs
+- **Code Quality**: ESLint + Prettier
 - **Environment Config**: dotenv
 
 ## Project Structure
@@ -28,30 +31,38 @@ A RESTful API backend built with Node.js, Express, and MongoDB following MVC arc
 auth-backend/
 ├── src/
 │   ├── config/
-│   │   └── db.js              # MongoDB connection
+│   │   └── db.ts              # MongoDB connection
+│   ├── types/
+│   │   ├── index.ts           # Shared interfaces
+│   │   ├── express.d.ts       # Express type extensions
+│   │   └── environment.d.ts   # Environment variables
 │   ├── models/
-│   │   └── User.js            # User schema
+│   │   └── User.ts            # User schema with types
 │   ├── controllers/
-│   │   ├── authController.js  # Auth logic
-│   │   └── userController.js  # User logic
+│   │   ├── authController.ts  # Auth logic (typed)
+│   │   └── userController.ts  # User logic (typed)
 │   ├── routes/
-│   │   ├── authRoutes.js      # Auth endpoints
-│   │   └── userRoutes.js      # User endpoints
+│   │   ├── authRoutes.ts      # Auth endpoints
+│   │   └── userRoutes.ts      # User endpoints
 │   ├── middleware/
-│   │   ├── auth.js            # JWT verification
-│   │   └── errorHandler.js    # Global error handler
-│   └── utils/
-│       └── generateToken.js   # JWT token generator
+│   │   ├── auth.ts            # JWT verification
+│   │   └── errorHandler.ts    # Global error handler
+│   ├── utils/
+│   │   └── generateToken.ts   # JWT token generator
+│   └── server.ts              # Entry point
+├── dist/                      # Compiled JavaScript
 ├── .env.example               # Environment template
 ├── .gitignore
+├── .eslintrc.json             # ESLint config
+├── .prettierrc                # Prettier config
+├── tsconfig.json              # TypeScript config
 ├── package.json
-├── server.js                  # Entry point
 └── README.md
 ```
 
 ## Installation
 
-1. **Clone or navigate to the project directory**
+1. **Navigate to the project directory**
 
 ```bash
 cd auth-backend
@@ -87,14 +98,40 @@ Make sure MongoDB is running locally or use MongoDB Atlas connection string.
 mongod
 ```
 
-5. **Run the application**
+## Development
+
+### Build TypeScript
 
 ```bash
-# Development mode with nodemon
-npm run dev
+npm run build
+```
 
-# Production mode
+### Run in Development Mode
+
+```bash
+npm run dev
+```
+
+### Run in Production Mode
+
+```bash
 npm start
+```
+
+### Code Quality
+
+```bash
+# Run ESLint
+npm run lint
+
+# Auto-fix ESLint issues
+npm run lint:fix
+
+# Format code with Prettier
+npm run format
+
+# Check formatting
+npm run format:check
 ```
 
 ## API Endpoints
@@ -193,6 +230,52 @@ curl -X GET http://localhost:5000/users/me \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
+## TypeScript Features
+
+### Type Safety
+
+All request/response objects are fully typed:
+
+```typescript
+// Request body types
+interface IRegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+// Response types
+interface IAuthResponse {
+  _id: string;
+  name: string;
+  email: string;
+  token: string;
+}
+
+// Controller with types
+export const register = async (
+  req: Request<object, object, IRegisterRequest>,
+  res: Response<IApiResponse<IAuthResponse>>,
+  next: NextFunction
+): Promise<void> => {
+  // Fully typed implementation
+};
+```
+
+### Custom Type Extensions
+
+Express Request is extended to include authenticated user:
+
+```typescript
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
+```
+
 ## Error Handling
 
 The API uses a global error handler that returns consistent error responses:
@@ -223,10 +306,18 @@ Common HTTP status codes:
 ## Security Features
 
 - Password hashing with bcrypt (10 salt rounds)
-- JWT token authentication
+- JWT token authentication with 30-day expiration
 - Password field excluded from queries by default
-- Email validation
+- Email validation with regex
 - Protected routes with middleware
+- Type-safe error handling
+
+## Code Quality
+
+- **TypeScript**: Strict mode enabled for maximum type safety
+- **ESLint**: Configured with TypeScript parser and recommended rules
+- **Prettier**: Consistent code formatting across the project
+- **Type Definitions**: Comprehensive interfaces for all data structures
 
 ## License
 

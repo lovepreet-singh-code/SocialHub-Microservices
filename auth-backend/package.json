@@ -1,16 +1,22 @@
 {
     "name": "auth-backend",
     "version": "1.0.0",
-    "description": "Node.js + Express backend with MongoDB and MVC architecture",
-    "main": "server.js",
+    "description": "Node.js + Express backend with MongoDB, TypeScript, and MVC architecture",
+    "main": "dist/server.js",
     "scripts": {
-        "start": "node server.js",
-        "dev": "nodemon server.js"
+        "start": "node dist/server.js",
+        "dev": "nodemon --exec ts-node src/server.ts",
+        "build": "tsc",
+        "lint": "eslint . --ext .ts",
+        "lint:fix": "eslint . --ext .ts --fix",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "format:check": "prettier --check \"src/**/*.ts\""
     },
     "keywords": [
         "nodejs",
         "express",
         "mongodb",
+        "typescript",
         "mvc",
         "authentication"
     ],
@@ -25,6 +31,19 @@
         "cors": "^2.8.5"
     },
     "devDependencies": {
-        "nodemon": "^3.0.1"
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.10.0",
+        "@types/bcryptjs": "^2.4.6",
+        "@types/jsonwebtoken": "^9.0.5",
+        "@types/cors": "^2.8.17",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.13.2",
+        "eslint": "^8.55.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.0.1",
+        "prettier": "^3.1.0",
+        "nodemon": "^3.0.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
     }
 }
