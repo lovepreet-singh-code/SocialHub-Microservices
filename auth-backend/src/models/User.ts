@@ -32,6 +32,14 @@ const userSchema = new Schema<IUserDocument>(
       default: [],
       select: false,
     },
+    avatar: {
+      type: String,
+      default: '',
+    },
+    avatarPublicId: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

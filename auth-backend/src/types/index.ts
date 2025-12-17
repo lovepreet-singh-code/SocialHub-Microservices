@@ -4,6 +4,8 @@ export interface IUser {
   email: string;
   password: string;
   refreshTokens?: string[];
+  avatar?: string;
+  avatarPublicId?: string;
   createdAt: Date;
   updatedAt: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
