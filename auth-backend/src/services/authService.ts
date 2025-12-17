@@ -1,6 +1,7 @@
 import User from '../models/User';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/tokenUtils';
 import AppError from '../utils/AppError';
+import cacheService from './cacheService';
 import { IRegisterRequest, ILoginRequest, IAuthResponse } from '../types';
 
 class AuthService {
@@ -121,6 +122,10 @@ class AuthService {
             user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken);
             await user.save();
         }
+
+        // Invalidate user cache
+        const cacheKey = cacheService.getCacheKey('user', userId);
+        await cacheService.del(cacheKey);
     }
 }
 
