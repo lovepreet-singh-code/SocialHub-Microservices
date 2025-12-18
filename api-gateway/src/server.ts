@@ -48,7 +48,7 @@ const createServiceProxy = (target: string, name: string) => {
 // Note: We need to strip the prefix for the proxy if the service doesn't expect it?
 // User service expects /auth and /users. Gateway receives /auth and /users. No rewrite needed.
 
-app.use(['/auth', '/users'], circuitBreakerMiddleware('User-Service'), createServiceProxy(USER_SERVICE_URL, 'User-Service'));
+app.use(['/auth', '/users', '/media'], circuitBreakerMiddleware('User-Service'), createServiceProxy(USER_SERVICE_URL, 'User-Service'));
 app.use('/posts', circuitBreakerMiddleware('Post-Service'), createServiceProxy(POST_SERVICE_URL, 'Post-Service'));
 app.use('/notifications', circuitBreakerMiddleware('Notification-Service'), createServiceProxy(NOTIFICATION_SERVICE_URL, 'Notification-Service'));
 

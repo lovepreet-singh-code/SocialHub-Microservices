@@ -7,6 +7,7 @@ import redisClient from './config/redisClient';
 import errorHandler from './middleware/errorHandler';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import mediaRoutes from './routes/mediaRoutes';
 import { notFoundHandler } from './middleware/notFoundHandler';
 
 const app: Application = express();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/media', mediaRoutes);
 
 // Health check route
 app.get('/', (_req: Request, res: Response) => {
