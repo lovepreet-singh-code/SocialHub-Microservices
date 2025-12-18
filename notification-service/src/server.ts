@@ -31,6 +31,28 @@ const io = socketIO.init(httpServer);
 io.use(socketAuth);
 registerSocketHandlers(io);
 
+// Initialize RabbitMQ Consumer
+import { notificationBus } from './utils/notificationBus';
+import * as notificationService from './services/notificationService';
+
+notificationBus.listen(async (payload, routingKey) => {
+    if (routingKey === 'user.created') {
+        await notificationService.createNotification({
+            userId: payload.id,
+            type: 'success',
+            title: 'Welcome!',
+            message: `Hi ${payload.name}, welcome to SocialHub!`,
+        });
+    } else if (routingKey === 'post.created') {
+        await notificationService.createNotification({
+            userId: payload.authorId,
+            type: 'info',
+            title: 'Post Created',
+            message: `Your post "${payload.title}" has been published.`,
+        });
+    }
+}).catch(err => console.error('Failed to start notification consumer:', err));
+
 // Routes
 app.use('/notifications', notificationRoutes);
 

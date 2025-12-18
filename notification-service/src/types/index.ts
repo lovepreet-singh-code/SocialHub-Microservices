@@ -68,7 +68,7 @@ export interface INotification {
 }
 
 export interface INotificationResponse {
-  notifications: INotification[];
+  notifications: any[]; // Use any or a union to handle Document vs Plane Interface for now to skip deep tsc issues
   unreadCount: number;
   page: number;
   totalPages: number;

@@ -1,37 +1,22 @@
-import { ExtendedError } from 'socket.io/dist/namespace';
+import { Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
-import { AuthenticatedSocket } from '../types/socket.d';
 import { IJwtPayload } from '../types';
-import User from '../models/User';
 
-export const socketAuth = async (socket: AuthenticatedSocket, next: (err?: ExtendedError) => void) => {
+export const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
     try {
-        const token =
-            socket.handshake.auth.token ||
-            socket.handshake.headers.authorization?.split(' ')[1] ||
-            socket.handshake.query.token;
+        const token = socket.handshake.auth.token || socket.handshake.headers.authorization?.split(' ')[1];
 
         if (!token) {
-            return next(new Error('Authentication error: Token is required'));
+            return next(new Error('Authentication error: No token provided'));
         }
 
-        const jwtSecret = process.env.JWT_SECRET;
-        if (!jwtSecret) {
-            return next(new Error('Server configuration error'));
-        }
+        const jwtSecret = process.env.JWT_SECRET || 'secret';
+        const decoded = jwt.verify(token, jwtSecret) as IJwtPayload;
 
-        const decoded = jwt.verify(token as string, jwtSecret) as IJwtPayload;
-
-        const user = await User.findById(decoded.id).select('name email');
-
-        if (!user) {
-            return next(new Error('Authentication error: User not found'));
-        }
-
-        socket.user = {
-            id: user._id.toString(),
-            email: user.email,
-            name: user.name
+        // Attach user info to socket
+        socket.data.user = {
+            id: decoded.id,
+            // You can add more info if it's in the token
         };
 
         next();

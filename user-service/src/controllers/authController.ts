@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from '../services/authService';
-import { IRegisterRequest, ILoginRequest, IAuthResponse, IApiResponse, IRefreshTokenRequest } from '../types';
+import {
+  IRegisterRequest,
+  ILoginRequest,
+  IAuthResponse,
+  IApiResponse,
+  IRefreshTokenRequest,
+} from '../types';
+import { rabbitMQ } from '../utils/rabbitMQ';
 
 // @desc    Register a new user
 // @route   POST /auth/register
@@ -12,6 +19,13 @@ export const register = async (
 ): Promise<void> => {
   try {
     const result = await authService.register(req.body);
+
+    // Publish event
+    await rabbitMQ.publish('user.created', {
+      id: result._id,
+      name: result.name,
+      email: result.email,
+    });
 
     res.status(201).json({
       success: true,
@@ -94,6 +108,7 @@ export const logout = async (
     if (!refreshToken) {
       res.status(400).json({
         success: false,
+
         message: 'Refresh token is required',
       });
       return;
