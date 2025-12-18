@@ -19,11 +19,13 @@ export interface IUserResponse {
 }
 
 export interface IAuthResponse {
-  _id: string;
-  name: string;
-  email: string;
-  token: string;
+  accessToken: string;
   refreshToken: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface IRegisterRequest {

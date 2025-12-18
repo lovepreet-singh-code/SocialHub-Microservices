@@ -9,6 +9,8 @@ import notificationRoutes from './routes/notificationRoutes';
 import { socketIO } from './config/socket';
 import { socketAuth } from './middleware/socketAuth';
 import { registerSocketHandlers } from './sockets/socketHandlers';
+import { notFoundHandler } from './middleware/notFoundHandler';
+
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -60,6 +62,9 @@ app.use('/notifications', notificationRoutes);
 app.get('/', (_req: Request, res: Response) => {
     res.json({ message: 'Notification Service API is running' });
 });
+
+// 404 Handler
+app.use(notFoundHandler);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

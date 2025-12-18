@@ -32,11 +32,13 @@ class AuthService {
         await user.save();
 
         return {
-            _id: user._id.toString(),
-            name: user.name,
-            email: user.email,
-            token: accessToken,
+            accessToken,
             refreshToken,
+            user: {
+                _id: user._id.toString(),
+                name: user.name,
+                email: user.email,
+            }
         };
     }
 
@@ -66,15 +68,17 @@ class AuthService {
         await user.save();
 
         return {
-            _id: user._id.toString(),
-            name: user.name,
-            email: user.email,
-            token: accessToken,
+            accessToken,
             refreshToken,
+            user: {
+                _id: user._id.toString(),
+                name: user.name,
+                email: user.email,
+            }
         };
     }
 
-    async refreshToken(token: string): Promise<{ token: string; refreshToken: string }> {
+    async refreshToken(token: string): Promise<{ accessToken: string; refreshToken: string }> {
         try {
             const decoded = verifyRefreshToken(token);
 
@@ -99,7 +103,7 @@ class AuthService {
             await user.save();
 
             return {
-                token: newAccessToken,
+                accessToken: newAccessToken,
                 refreshToken: newRefreshToken,
             };
         } catch (error) {

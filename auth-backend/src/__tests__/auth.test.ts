@@ -56,8 +56,8 @@ describe('Auth API', () => {
 
             expect(res.status).toBe(201);
             expect(res.body.success).toBe(true);
-            expect(res.body.data).toHaveProperty('email', userData.email);
-            expect(res.body.data).toHaveProperty('token');
+            expect(res.body.data.user).toHaveProperty('email', userData.email);
+            expect(res.body.data).toHaveProperty('accessToken');
             expect(res.body.data).toHaveProperty('refreshToken');
         });
 

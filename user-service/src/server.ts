@@ -7,6 +7,7 @@ import redisClient from './config/redisClient';
 import errorHandler from './middleware/errorHandler';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import { notFoundHandler } from './middleware/notFoundHandler';
 
 const app: Application = express();
 
@@ -31,6 +32,9 @@ app.use('/users', userRoutes);
 app.get('/', (_req: Request, res: Response) => {
   res.json({ message: 'User Service API is running' });
 });
+
+// 404 Handler
+app.use(notFoundHandler);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

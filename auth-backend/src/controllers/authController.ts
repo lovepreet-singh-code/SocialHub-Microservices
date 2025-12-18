@@ -47,7 +47,7 @@ export const login = async (
 // @access  Public
 export const refresh = async (
   req: Request<object, object, IRefreshTokenRequest>,
-  res: Response<IApiResponse<{ token: string; refreshToken: string }>>,
+  res: Response<IApiResponse<{ accessToken: string; refreshToken: string }>>,
   next: NextFunction
 ): Promise<void> => {
   try {
