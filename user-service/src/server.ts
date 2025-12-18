@@ -37,6 +37,10 @@ app.use(errorHandler);
 
 const PORT: number = parseInt(process.env.PORT || '5001', 10);
 
-app.listen(PORT, () => {
-  console.log(`User Service is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`User Service is running on port ${PORT}`);
+  });
+}
+
+export { app };

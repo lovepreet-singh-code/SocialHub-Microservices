@@ -49,6 +49,10 @@ app.use(errorHandler);
 
 const PORT: number = parseInt(process.env.PORT || '5000', 10);
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  httpServer.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+export { app };
