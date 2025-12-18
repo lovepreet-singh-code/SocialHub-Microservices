@@ -1,9 +1,10 @@
-import express from 'express';
-import * as postController from '../controllers/postController';
+import { Router } from 'express';
+import { createPost, getPosts } from '../controllers/postController';
+import { idempotency } from '../middleware/idempotency';
 
-const router = express.Router();
+const router = Router();
 
-router.post('/', postController.createPost);
-router.get('/', postController.getPosts);
+router.post('/', idempotency, createPost); // Idempotent creation
+router.get('/', getPosts);
 
 export default router;

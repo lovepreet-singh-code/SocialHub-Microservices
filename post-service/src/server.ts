@@ -15,6 +15,10 @@ mongoose.connect(mongoUri)
     .then(() => console.log('Post Service Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+// Connect to Redis
+import redisClient from './utils/redisClient';
+redisClient.connect().catch(err => console.error('Redis Connection Error:', err));
+
 app.use('/posts', postRoutes);
 
 app.get('/', (_req, res) => {
